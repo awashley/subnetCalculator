@@ -52,6 +52,9 @@ def findSubnetrangeFourth(slashMask, fourthOctet):
         if count == 0:
             field.append(count)
             count = count + space
+        elif count == 2:
+            field.append(count)
+            count = count + space
         else:
             count = count + space
             field.append(count)
@@ -230,18 +233,60 @@ def findSubnetrangeFirst(slashMask, firstOctet):
             lastDetails['mask'] = mask
     return lastDetails
 
+def octetCheck(octet):
+    checkCode = None
+    if octet in range(0,256):
+        checkCode = 1
+    else:
+        checkCode = 0
+    return checkCode
+
+
+
 def subnetCalculator(subnet):
     #function to parse the octets and finish the calculation of the subnet
     #this function works for /1 to /31 subnets only
     #
     #define the empty result
     resultDict = {}
-    #breakdown the subnet string
+    #define the empty slashMask
+    slashMask = None
+    #breakdown the subnet string with syntax error bailouts
     octetList = subnet.split('.')
+    if octetList[0].isnumeric() == False:
+        print('Error: The first octet input is not a number')
+        return
     firstOctet = int(octetList[0])
+    if octetCheck(firstOctet) == 0:
+        print(f"Error: The first octet input: {firstOctet} is out of range")
+        return
+    if octetList[1].isnumeric() == False:
+        print('Error: The second octet input is not a number')
+        return
     secondOctet = int(octetList[1])
+    if octetCheck(secondOctet) == 0:
+        print(f"Error: The second octet input: {secondOctet} is out of range")
+        return
+    if octetList[2].isnumeric() == False:
+        print('Error: The third octet input is not a number')
+        return
     thirdOctet = int(octetList[2])
+    if octetCheck(thirdOctet) == 0:
+        print(f"Error: The third octet input: {thirdOctet} is out of range")
+        return
+    if octetList[3].find('/') == -1:
+        print('Error: Missing Slash Notation for the Subnet')
+        return
+    if octetList[3].split('/')[0].isnumeric() == False:
+        print('Error: The fourth octet input is not a number')
+        return
     fourthOctet = int(octetList[3].split('/')[0])
+    if octetCheck(fourthOctet) == 0:
+        print(f"Error: The fourth octet input: {fourthOctet} is out of range")
+        return
+    if octetList[3].split('/')[1] == '':
+        print('Error: Slash Notation is Empty')
+        return
     slashMask = int(octetList[3].split('/')[1])
     #
     #work with small subnets defined in the fourth octet
@@ -286,8 +331,12 @@ def subnetCalculator(subnet):
         resultDict['TotalHosts'] = lastDetails['usable']
     #bail out on syntax for the subnet
     else:
-        print('Subnet Mask out of range')
-        return
+        if slashMask == 32:
+            print(f"Informational: No Need to Calculate a /{slashMask} Subnet!!")
+            return
+        else:
+            print(f"Error: Slash Notation for Mask: {slashMask} is Invalid")
+            return
     #print the results dictionary for output and verification in the interactive prompt
     if lastDetails:
         print(f"Address: {resultDict['Address']}")
