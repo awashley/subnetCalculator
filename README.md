@@ -10,14 +10,14 @@ Use: subnetDict = subnetCalculator(subnet)
 The output will print and the subnetDict dictionary can be available to manipulate
 
 ### Example
-    
+
   subnetDict.keys()
-  
+
   Output: dict_keys(['Address', 'Netmask', 'Network', 'Broadcast', 'HostMin', 'HostMax', 'TotalHosts'])
 
 ## Argument Version
 
-Run: python3 python3 subnetArg.py 10.1.1.1/29
+Run: python3 subnetArg.py 10.1.1.1/29
 
 With 10.1.1.1/29 being the desired subnet to calculate
 
