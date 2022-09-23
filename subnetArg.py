@@ -55,9 +55,6 @@ def findSubnetrangeFourth(slashMask, fourthOctet):
         elif count == 2:
             field.append(count)
             count = count + space
-        elif count == 128:
-            field.append(count)
-            count = count + space
         else:
             count = count + space
             field.append(count)
