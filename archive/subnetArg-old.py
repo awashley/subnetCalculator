@@ -1,7 +1,9 @@
 #!/usr/bin/env python
+import sys
+
 
 #default defined test subnet
-subnet = '10.2.3.4/28'
+#subnet = '10.2.3.4/28'
 #
 def findSubnetrangeFourth(slashMask, fourthOctet):
     #function to narrow the details for subnets specifically defined in the fourth octet
@@ -13,50 +15,49 @@ def findSubnetrangeFourth(slashMask, fourthOctet):
     broadFour = 0
     usable = 0
     if slashMask == 24:
-        #[0]
         amount = 1
         space = 256
         mask = '255.255.255.0'
     elif slashMask == 25:
-        #[0, 256]
         amount = 2
         space = 128
         mask = '255.255.255.128'
     elif slashMask == 26:
-        #[0, 128, 192, 256]
         amount = 4
         space = 64
         mask = '255.255.255.192'
     elif slashMask == 27:
-        #[0, 64, 96, 128, 160, 192, 224, 256]
         amount = 8
         space = 32
         mask = '255.255.255.224'
     elif slashMask == 28:
-        #[0, 32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240, 256]
         amount = 16
         space = 16
         mask = '255.255.255.240'
     elif slashMask == 29:
-        #[0, 16, 24, 32, 40,..... 240, 248, 256]
         amount = 32
         space = 8
         mask = '255.255.255.248'
     elif slashMask == 30:
-        #[0, 8, 12, 16, 20, 24, 28, ... 236, 240, 244, 248, 252, 256]
         amount = 64
         space = 4
         mask = '255.255.255.252'
     elif slashMask == 31:
-        #[0, 2, 6, 8, 10, ... 250, 252, 254, 256]
         amount = 128
         space = 2
         mask = '255.255.255.254'
     field = []
     count = 0
     for i in range(amount):
-        field.append(count)
-        count = count + space
+        if count == 0:
+            field.append(count)
+            count = count + space
+        elif count == 2:
+            field.append(count)
+            count = count + space
+        else:
+            count = count + space
+            field.append(count)
     for section in field:
         endSection = section + space
         if fourthOctet in range(section, endSection):
@@ -240,6 +241,8 @@ def octetCheck(octet):
         checkCode = 0
     return checkCode
 
+
+
 def subnetCalculator(subnet):
     #function to parse the octets and finish the calculation of the subnet
     #this function works for /1 to /31 subnets only
@@ -350,9 +353,8 @@ def subnetCalculator(subnet):
 
 def main():
     #Key on the subnet sting variable to calcuate the subnet details
-    #subnetDict = subnetCalculator(subnet)
+    subnet = sys.argv[1]
+    subnetDict = subnetCalculator(subnet)
     #
-    #Key on subnet itself to calcuate the subnet details
-    #subnetDict = subnetCalculator('10.16.1.24/14')
-    #
-    pass
+if __name__ == '__main__':
+    main()

@@ -49,15 +49,8 @@ def findSubnetrangeFourth(slashMask, fourthOctet):
     field = []
     count = 0
     for i in range(amount):
-        if count == 0:
-            field.append(count)
-            count = count + space
-        elif count == 2:
-            field.append(count)
-            count = count + space
-        else:
-            count = count + space
-            field.append(count)
+        field.append(count)
+        count = count + space
     for section in field:
         endSection = section + space
         if fourthOctet in range(section, endSection):
